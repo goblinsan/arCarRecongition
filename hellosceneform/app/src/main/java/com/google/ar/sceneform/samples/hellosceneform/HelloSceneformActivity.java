@@ -133,24 +133,25 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 System.out.println("Image format is YUV_420_888");
 //                Log.d("ImageFormat", "Image format is YUV_420_888");
             }
-
+//
             if (currentImage != null) {
-                Image.Plane[] planes = currentImage.getPlanes();
-                ByteBuffer buffer = planes[0].getBuffer();
-                int pixelStride = planes[0].getPixelStride();
-                int rowStride = planes[0].getRowStride();
-                int rowPadding = rowStride - pixelStride * currentImage.getWidth();
-                int bitmapWidth = currentImage.getWidth() + rowPadding / pixelStride;
 
-//                if (currentImage != null) {
-//                    currentImage.close();
-//                }
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                Bitmap latestBitmap=Bitmap.createBitmap(bitmapWidth, currentImage.getHeight(), Bitmap.Config.ARGB_8888);
-                Bitmap cropped = Bitmap.createBitmap(latestBitmap, 0, 0, currentImage.getWidth(), currentImage.getHeight());
-                cropped.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] newPng = baos.toByteArray();
-
+//                Image.Plane[] planes = currentImage.getPlanes();
+//                ByteBuffer buffer = planes[0].getBuffer();
+//                int pixelStride = planes[0].getPixelStride();
+//                int rowStride = planes[0].getRowStride();
+//                int rowPadding = rowStride - pixelStride * currentImage.getWidth();
+//                int bitmapWidth = currentImage.getWidth() + rowPadding / pixelStride;
+//
+////                if (currentImage != null) {
+////                    currentImage.close();
+////                }
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                Bitmap latestBitmap=Bitmap.createBitmap(bitmapWidth, currentImage.getHeight(), Bitmap.Config.ARGB_8888);
+//                Bitmap cropped = Bitmap.createBitmap(latestBitmap, 0, 0, currentImage.getWidth(), currentImage.getHeight());
+//                cropped.compress(Bitmap.CompressFormat.PNG, 100, baos);
+//                byte[] newPng = baos.toByteArray();
+            byte[] newJpeg = ImageConverter.toByteArray(currentImage);
                 File f = new File(this.getApplicationContext().getCacheDir(), "file.png");
                 try {
                     f.createNewFile();
@@ -166,7 +167,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
                 }
 
                 try {
-                    fos.write(newPng);
+                    fos.write(newJpeg);
                     fos.flush();
                     fos.close();
                     CompletableFuture<String> something = AsyncHttp.postImage(f);
