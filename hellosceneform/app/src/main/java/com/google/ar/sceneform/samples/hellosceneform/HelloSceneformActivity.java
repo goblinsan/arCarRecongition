@@ -29,6 +29,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
+import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.google.ar.core.Anchor;
 import com.google.ar.core.Frame;
@@ -63,6 +65,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
   private ArFragment arFragment;
   private ModelRenderable andyRenderable;
   private ViewRenderable testViewRenderable;
+  private String desc;
 
   @Override
   @SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -93,7 +96,8 @@ public class HelloSceneformActivity extends AppCompatActivity {
               return null;
             });
 
-      ViewRenderable.builder()
+
+      CompletableFuture<Void> view = ViewRenderable.builder()
               .setView(this, R.layout.test_view)
               .build()
               .thenAccept(renderable -> testViewRenderable = renderable);
@@ -181,7 +185,7 @@ public class HelloSceneformActivity extends AppCompatActivity {
                     Log.i("response", somethingElse);
                     JsonElement root = new JsonParser().parse(somethingElse);
                     String description = root.getAsJsonObject().get("description").getAsString();
-
+                    desc = description;
 
                     Log.i("response", description);
 
@@ -189,6 +193,15 @@ public class HelloSceneformActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
             }
+
+            while(!view.isDone()) {
+
+            }
+
+                TextView a = testViewRenderable.getView().findViewById(R.id.planetInfoCard);
+                a.setText(desc);
+
+
 
         });
   }
